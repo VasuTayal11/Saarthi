@@ -1,8 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-const ChatInterface = ({ messages, onSendMessage, isLoading }) => {
+// Added default empty array for messages to prevent crash if undefined
+const ChatInterface = ({ messages = [], onSendMessage, isLoading }) => {
   const [inputMessage, setInputMessage] = useState('');
+  
+  // Refs for auto-scrolling and input focus
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -10,14 +14,22 @@ const ChatInterface = ({ messages, onSendMessage, isLoading }) => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isLoading]); // Scroll when messages OR loading state changes
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (inputMessage.trim() && !isLoading) {
       await onSendMessage(inputMessage);
       setInputMessage('');
+      // Focus back on input after sending
+      setTimeout(() => inputRef.current?.focus(), 100);
     }
+  };
+
+  const handleSuggestedClick = (question) => {
+    setInputMessage(question);
+    // Focus using Ref instead of ID
+    setTimeout(() => inputRef.current?.focus(), 100);
   };
 
   const suggestedQuestions = [
@@ -26,6 +38,16 @@ const ChatInterface = ({ messages, onSendMessage, isLoading }) => {
     "इससे मुझे क्या याद रखना चाहिए?",
     "विस्तार से समझाएं"
   ];
+
+  // Helper to safely format time
+  const formatTime = (timestamp) => {
+    if (!timestamp) return new Date().toLocaleTimeString();
+    try {
+      return new Date(timestamp).toLocaleTimeString();
+    } catch (e) {
+      return "";
+    }
+  };
 
   return (
     <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden h-[600px] flex flex-col">
@@ -56,10 +78,7 @@ const ChatInterface = ({ messages, onSendMessage, isLoading }) => {
               {suggestedQuestions.map((question, index) => (
                 <button
                   key={index}
-                  onClick={() => {
-                    setInputMessage(question);
-                    setTimeout(() => document.getElementById('chat-input')?.focus(), 100);
-                  }}
+                  onClick={() => handleSuggestedClick(question)}
                   className="bg-white border border-gray-200 rounded-lg p-3 text-sm text-gray-700 hover:border-primary-300 hover:shadow-md transition-all duration-200 text-left"
                 >
                   {question}
@@ -101,7 +120,8 @@ const ChatInterface = ({ messages, onSendMessage, isLoading }) => {
                     message.sender === 'user' ? 'text-primary-100' : 'text-gray-500'
                   }`}
                 >
-                  {new Date(message.timestamp).toLocaleTimeString()}
+                  {/* Fixed: Safe time formatting */}
+                  {formatTime(message.timestamp)}
                 </div>
               </div>
             </div>
@@ -129,7 +149,7 @@ const ChatInterface = ({ messages, onSendMessage, isLoading }) => {
       <div className="border-t border-gray-200 p-4 bg-white">
         <form onSubmit={handleSubmit} className="flex space-x-3">
           <input
-            id="chat-input"
+            ref={inputRef} // Fixed: Using Ref instead of ID
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}

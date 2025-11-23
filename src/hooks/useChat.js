@@ -26,7 +26,7 @@ export const useChat = () => {
 
     try {
       // Send message to backend
-      const response = await fetch('https://f6ae1b0e8949.ngrok-free.app/chat', {
+      const response = await fetch('https://aydin-unstandardised-nonerroneously.ngrok-free.dev/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

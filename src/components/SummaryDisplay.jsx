@@ -1,6 +1,15 @@
 import React from 'react';
 
 const SummaryDisplay = ({ summary }) => {
+  // Safety Check: If summary data is missing, don't render or crash
+  if (!summary) {
+    return (
+      <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 text-center text-gray-500">
+        Loading summary...
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
       {/* Header */}
@@ -12,17 +21,6 @@ const SummaryDisplay = ({ summary }) => {
       </div>
 
       <div className="p-6 space-y-6">
-        {/* English Summary */}
-        <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
-          <div className="flex items-center space-x-2 mb-4">
-            <div className="bg-blue-500 p-2 rounded-lg">
-              <span className="text-white font-bold">EN</span>
-            </div>
-            <h3 className="text-lg font-semibold text-gray-800">English Summary</h3>
-          </div>
-          <p className="text-gray-700 leading-relaxed">{summary.english}</p>
-        </div>
-
         {/* Hindi Explanation */}
         <div className="bg-green-50 rounded-xl p-6 border border-green-200">
           <div className="flex items-center space-x-2 mb-4">
@@ -31,27 +29,10 @@ const SummaryDisplay = ({ summary }) => {
             </div>
             <h3 className="text-lg font-semibold text-gray-800">Hindi Explanation</h3>
           </div>
-          <p className="text-gray-700 leading-relaxed text-lg" dir="rtl">
-            {summary.hindi}
+          {/* FIXED: Removed dir="rtl" because Hindi is Left-to-Right */}
+          <p className="text-gray-700 leading-relaxed text-lg">
+            {summary.hindi || "हिंदी सारांश उपलब्ध नहीं है।"}
           </p>
-        </div>
-
-        {/* Key Points */}
-        <div className="bg-purple-50 rounded-xl p-6 border border-purple-200">
-          <div className="flex items-center space-x-2 mb-4">
-            <span className="text-purple-600 text-lg">⭐</span>
-            <h3 className="text-lg font-semibold text-gray-800">Key Points</h3>
-          </div>
-          <ul className="space-y-2">
-            {summary.keyPoints.map((point, index) => (
-              <li key={index} className="flex items-start space-x-3">
-                <div className="bg-purple-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-1 flex-shrink-0">
-                  {index + 1}
-                </div>
-                <span className="text-gray-700">{point}</span>
-              </li>
-            ))}
-          </ul>
         </div>
 
         {/* Features */}
@@ -59,9 +40,9 @@ const SummaryDisplay = ({ summary }) => {
           <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
             <div className="flex items-center space-x-2 mb-2">
               <span className="text-orange-600 text-lg">🌐</span>
-              <h4 className="font-semibold text-gray-800">Bilingual Support</h4>
+              <h4 className="font-semibold text-gray-800">Summariser</h4>
             </div>
-            <p className="text-sm text-gray-600">Get explanations in both English and Hindi</p>
+            <p className="text-sm text-gray-600">Get summaries in Hindi</p>
           </div>
           <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
             <div className="flex items-center space-x-2 mb-2">
