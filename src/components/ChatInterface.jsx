@@ -59,7 +59,7 @@ const ChatInterface = ({ messages = [], onSendMessage, isLoading }) => {
           </div>
           <div>
             <h2 className="text-xl font-bold text-white">सारथी AI सहायक</h2>
-            <p className="text-primary-100 text-sm">अपने PDF के बारे में हिंदी में कुछ भी पूछें</p>
+            <p className="text-primary-100 text-sm">अपने PDF के बारे में कुछ भी पूछें</p>
           </div>
         </div>
       </div>
@@ -153,7 +153,7 @@ const ChatInterface = ({ messages = [], onSendMessage, isLoading }) => {
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
-            placeholder="अपने PDF के बारे में पूछें... (केवल हिंदी में)"
+            placeholder="अपने PDF के बारे में पूछें..."
             className="flex-1 border border-gray-300 rounded-2xl px-4 py-3 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200"
             disabled={isLoading}
           />
@@ -170,7 +170,7 @@ const ChatInterface = ({ messages = [], onSendMessage, isLoading }) => {
           </button>
         </form>
         <div className="text-xs text-gray-500 text-center mt-2">
-          सारथी केवल हिंदी समझता है। आपकी चैट आपके ब्राउज़र में स्थानीय रूप से संग्रहीत है।
+          आपकी चैट आपके ब्राउज़र में स्थानीय रूप से संग्रहीत है।
         </div>
       </div>
     </div>
